@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.viaplayapi.sample"
+        minSdkVersion 21
+        targetSdkVersion 26
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+
+    // Architecture Components
+    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
+
+    // Retrofit
+    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofit"
+    compile "com.google.code.gson:gson:$rootProject.gson"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.converterGson"
+
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    testImplementation "org.assertj:assertj-core:$rootProject.assertj"
+    androidTestImplementation "com.android.support.test:runner:$rootProject.runnerVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
+}
