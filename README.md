@@ -15,18 +15,23 @@ SectionPageActivity - For Section Pages
 RecycleView - For showing section list
 
 - Network component
+
 Retrofit API - For network connection.
 
 - Database component
+
 Room - persistence library provides an abstraction layer over SQLite
 
 - Lifecycle component 
+
 ViewModel - Providing data to View and handling events from View
 
 - Unit Testing
+
 PageViewModelTest
 
 - Instrumentation Test
+
 PageDaoTest 
 
 
