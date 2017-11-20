@@ -17,23 +17,23 @@ Project APIs:
 
 - Network component
 
-    Retrofit API - For network connection.
+	    Retrofit API - For network connection.
 
 - Database component
 
-    Room - persistence library provides an abstraction layer over SQLite
+	    Room - persistence library provides an abstraction layer over SQLite
 
 - Lifecycle component 
 
-    ViewModel - Providing data to View and handling events from View
+	    ViewModel - Providing data to View and handling events from View
 
 - Unit Testing
 
-    PageViewModelTest
+	    PageViewModelTest
 
 - Instrumentation Test
 
-    PageDaoTest 
+	    PageDaoTest 
 
 
 
