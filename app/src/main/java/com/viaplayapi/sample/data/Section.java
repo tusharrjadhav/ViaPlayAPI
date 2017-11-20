@@ -1,7 +1,5 @@
 package com.viaplayapi.sample.data;
 
-import android.support.annotation.VisibleForTesting;
-
 import java.io.Serializable;
 
 /**
@@ -17,7 +15,6 @@ public class Section implements Serializable{
     private String templated;
     private String active;
 
-    @VisibleForTesting
     public String getHref() {
         return href;
     }

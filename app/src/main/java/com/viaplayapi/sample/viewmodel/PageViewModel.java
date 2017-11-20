@@ -38,9 +38,9 @@ public class PageViewModel extends ViewModel {
          GET Page Resources
          **/
         Call call = remoteRepository.getRootPage();
-        call.enqueue(new Callback() {
+        call.enqueue(new Callback<Page>() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Call<Page> call, Response<Page> response) {
                 Log.d(TAG, "Root Page:" + response.toString());
                 if (response.isSuccessful()) {
                     Page page = (Page) response.body();
@@ -50,7 +50,7 @@ public class PageViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
+            public void onFailure(Call<Page> call, Throwable t) {
                 Log.e(TAG, "onFailure", t);
                 getRootPage(callback);
             }
@@ -68,9 +68,9 @@ public class PageViewModel extends ViewModel {
          **/
         String url = section.getHref().split("\\{")[0];
         Call call = remoteRepository.getSectionPage(url);
-        call.enqueue(new Callback() {
+        call.enqueue(new Callback<Page>() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Call<Page> call, Response<Page> response) {
                 Log.d(TAG, "Root Page:" + response.toString());
                 if (response.isSuccessful()) {
                     Page page = (Page) response.body();
@@ -80,7 +80,7 @@ public class PageViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
+            public void onFailure(Call<Page> call, Throwable t) {
                 Log.e(TAG, "onFailure", t);
                 getSectionPage(section.getId(), callback);
             }
