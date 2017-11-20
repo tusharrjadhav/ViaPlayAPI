@@ -9,35 +9,37 @@ I have created two activity, with simple UI as Recycle view.
 
 Project APIs:
 
-- UX component
-MainActivity - For Root page.
-SectionPageActivity - For Section Pages
-RecycleView - For showing section list
+- UX component:
+
+    MainActivity - For Root page.
+    SectionPageActivity - For Section Pages
+    RecycleView - For showing section list
 
 - Network component
 
-Retrofit API - For network connection.
+    Retrofit API - For network connection.
 
 - Database component
 
-Room - persistence library provides an abstraction layer over SQLite
+    Room - persistence library provides an abstraction layer over SQLite
 
 - Lifecycle component 
 
-ViewModel - Providing data to View and handling events from View
+    ViewModel - Providing data to View and handling events from View
 
 - Unit Testing
 
-PageViewModelTest
+    PageViewModelTest
 
 - Instrumentation Test
 
-PageDaoTest 
+    PageDaoTest 
 
 
 
 Resources:
-Android-architecture : https://github.com/googlesamples/android-architecture/tree/todo-mvvm-live/
+
+    Android-architecture : https://github.com/googlesamples/android-architecture/tree/todo-mvvm-live/
 
 
 
