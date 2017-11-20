@@ -11,7 +11,7 @@ Project APIs:
 
 - UX component:
 
-    MainActivity - For Root page.
+    MainActivity - For Root page
     SectionPageActivity - For Section Pages
     RecycleView - For showing section list
 
