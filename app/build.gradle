@@ -32,9 +32,9 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
 
     // Retrofit
-    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofit"
-    compile "com.google.code.gson:gson:$rootProject.gson"
-    compile "com.squareup.retrofit2:converter-gson:$rootProject.converterGson"
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit"
+    implementation "com.google.code.gson:gson:$rootProject.gson"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.converterGson"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
     testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
