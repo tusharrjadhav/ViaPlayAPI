@@ -1,9 +1,12 @@
 package com.viaplayapi.sample.activity;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +16,6 @@ import com.viaplayapi.sample.ViaPlayApplication;
 import com.viaplayapi.sample.data.Page;
 import com.viaplayapi.sample.data.Section;
 import com.viaplayapi.sample.viewmodel.PageViewModel;
-import com.viaplayapi.sample.viewmodel.PageViewModel.GetPageCallback;
 
 /**
  * Created by Tushar_temp on 19/11/17
@@ -22,12 +24,12 @@ import com.viaplayapi.sample.viewmodel.PageViewModel.GetPageCallback;
 public class SectionPageActivity extends AppCompatActivity implements MyRecyclerViewAdapter.ItemClickListener {
 
     public static final String EXTRA_SECTION = "EXTRA_SECTION";
+    private static final String TAG = SectionPageActivity.class.getSimpleName();
     MyRecyclerViewAdapter adapter;
     TextView titleTx;
     TextView descriptionTx;
     RecyclerView recyclerView;
     PageViewModel viewModel;
-    Page page;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +46,11 @@ public class SectionPageActivity extends AppCompatActivity implements MyRecycler
         descriptionTx = findViewById(R.id.description);
 
         viewModel = ViaPlayApplication.obtainViewModel(this);
-
+        subscribe();
         getSectionPage(((Section) getIntent().getSerializableExtra(EXTRA_SECTION)));
     }
 
-    private void updateUI() {
+    private void updateUI(Page page) {
         if (page != null) {
             titleTx.setText(page.getTitle());
             descriptionTx.setText(page.getDescription());
@@ -56,34 +58,30 @@ public class SectionPageActivity extends AppCompatActivity implements MyRecycler
             adapter = new MyRecyclerViewAdapter(this, page.getLinks().sections);
             adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
+        } else {
+            Toast.makeText(SectionPageActivity.this, "There is issue with n/w connection, no offline data is availabel", Toast.LENGTH_LONG).show();
         }
     }
 
     public void getSectionPage(Section section) {
 
-        viewModel.getSectionPageFromService(section, new GetPageCallback() {
-            @Override
-            public void onPageLoaded(Page page) {
-                SectionPageActivity.this.page = page;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateUI();
-                    }
-                });
+        viewModel.getSectionPageFromService(section);
+    }
 
-            }
-
+    private void subscribe() {
+        final Observer<Page> pageObserver = new Observer<Page>() {
             @Override
-            public void onDataNotAvailable() {
-                Toast.makeText(SectionPageActivity.this, "There is issue with n/w connection, no offline data is availabel", Toast.LENGTH_LONG).show();
+            public void onChanged(@Nullable Page page) {
+                Log.d(TAG, "On UI update");
+                updateUI(page);
             }
-        });
+        };
+        viewModel.getPageMutableLiveData().observe(this, pageObserver);
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        getSectionPage(page.getLinks().sections.get(position));
+        getSectionPage(viewModel.getPageMutableLiveData().getValue().getLinks().sections.get(position));
     }
 }
 

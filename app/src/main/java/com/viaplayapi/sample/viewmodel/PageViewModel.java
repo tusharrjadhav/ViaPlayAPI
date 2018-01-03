@@ -1,17 +1,14 @@
 package com.viaplayapi.sample.viewmodel;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
-import android.util.Log;
 
+import com.viaplayapi.sample.callback.GetPageCallback;
 import com.viaplayapi.sample.data.Page;
 import com.viaplayapi.sample.data.Section;
 import com.viaplayapi.sample.data.source.local.LocalRepository;
 import com.viaplayapi.sample.data.source.remote.RemoteRepository;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Tushar_temp on 19/11/17
@@ -22,6 +19,7 @@ public class PageViewModel extends ViewModel {
     private RemoteRepository remoteRepository;
     private LocalRepository localRepository;
     private String TAG = PageViewModel.class.getSimpleName();
+    private MutableLiveData<Page> pageMutableLiveData = new MutableLiveData<>();
 
     public PageViewModel(RemoteRepository remoteRepository, LocalRepository localRepository) {
         this.remoteRepository = remoteRepository;
@@ -29,70 +27,71 @@ public class PageViewModel extends ViewModel {
     }
 
     @VisibleForTesting
-    public void getRootPage(GetPageCallback callback) {
-        localRepository.getRootPage(callback);
-    }
-
-    public void getRootFromService(final GetPageCallback callback) {
-        /**
-         GET Page Resources
-         **/
-        Call call = remoteRepository.getRootPage();
-        call.enqueue(new Callback<Page>() {
+    public void getRootPage() {
+        localRepository.getRootPage(new GetPageCallback() {
             @Override
-            public void onResponse(Call<Page> call, Response<Page> response) {
-                Log.d(TAG, "Root Page:" + response.toString());
-                if (response.isSuccessful()) {
-                    Page page = (Page) response.body();
-                    localRepository.insertPage(page);
-                    callback.onPageLoaded(page);
-                }
+            public void onPageLoaded(Page page) {
+                pageMutableLiveData.postValue(page);
             }
 
             @Override
-            public void onFailure(Call<Page> call, Throwable t) {
-                Log.e(TAG, "onFailure", t);
-                getRootPage(callback);
+            public void onDataNotAvailable() {
+                pageMutableLiveData.postValue(null);
             }
         });
     }
 
-    @VisibleForTesting
-    public void getSectionPage(String sectionId, GetPageCallback callback) {
-        localRepository.getPageById(sectionId, callback);
+    public void getRootFromService() {
+
+        remoteRepository.getRootPage(new GetPageCallback() {
+            @Override
+            public void onPageLoaded(Page page) {
+                localRepository.insertPage(page);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                getRootPage();
+            }
+        });
+
     }
 
-    public void getSectionPageFromService(final Section section, final GetPageCallback callback) {
+    @VisibleForTesting
+    public void getSectionPage(String sectionId) {
+        localRepository.getPageById(sectionId, new GetPageCallback() {
+            @Override
+            public void onPageLoaded(Page page) {
+                pageMutableLiveData.postValue(page);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                pageMutableLiveData.postValue(null);
+            }
+        });
+    }
+
+    public void getSectionPageFromService(final Section section) {
         /**
          GET Page Resources
          **/
         String url = section.getHref().split("\\{")[0];
-        Call call = remoteRepository.getSectionPage(url);
-        call.enqueue(new Callback<Page>() {
+        remoteRepository.getSectionPage(url, new GetPageCallback() {
             @Override
-            public void onResponse(Call<Page> call, Response<Page> response) {
-                Log.d(TAG, "Root Page:" + response.toString());
-                if (response.isSuccessful()) {
-                    Page page = (Page) response.body();
-                    localRepository.insertPage(page);
-                    callback.onPageLoaded(page);
-                }
+            public void onPageLoaded(Page page) {
+                pageMutableLiveData.postValue(page);
             }
 
             @Override
-            public void onFailure(Call<Page> call, Throwable t) {
-                Log.e(TAG, "onFailure", t);
-                getSectionPage(section.getId(), callback);
+            public void onDataNotAvailable() {
+                getSectionPage(section.getId());
             }
         });
-    }
-
-    public interface GetPageCallback {
-
-        void onPageLoaded(Page page);
-
-        void onDataNotAvailable();
 
     }
 
+    public MutableLiveData<Page> getPageMutableLiveData() {
+        return pageMutableLiveData;
+    }
 }

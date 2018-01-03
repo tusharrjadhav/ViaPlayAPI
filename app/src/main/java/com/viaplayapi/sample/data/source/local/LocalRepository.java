@@ -2,10 +2,10 @@ package com.viaplayapi.sample.data.source.local;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.viaplayapi.sample.callback.GetPageCallback;
 import com.viaplayapi.sample.data.Links;
 import com.viaplayapi.sample.data.Page;
 import com.viaplayapi.sample.data.Section;
-import com.viaplayapi.sample.viewmodel.PageViewModel.GetPageCallback;
 
 import java.util.List;
 import java.util.concurrent.Executor;
